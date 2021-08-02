@@ -1,0 +1,36 @@
+{
+  "name": "oslabs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "debug": "DEBUG",
+    "lint": "eslint '**/**/*.{js,ts,tsx}' --quiet --fix",
+    "test": "npx playwright test --workers 5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.13.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "playwright": "^1.13.1"
+  }
+}
