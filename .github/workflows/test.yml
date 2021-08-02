@@ -1,4 +1,7 @@
-on : [push]
+name: CI
+
+on: [push]
+
 jobs:
   test_linux:
     runs-on: ubuntu-latest
