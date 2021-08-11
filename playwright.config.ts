@@ -1,8 +1,9 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from 'playwright'
 
+const BASE_URL = process.env.URL
+
 const config: PlaywrightTestConfig = {
-  reporter: 'list',
   projects: [
     {
       name: 'Desktop Chrome',
@@ -37,8 +38,11 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
+  reporter: 'list',
+  retries: 1,
   use: {
-    baseURL: 'https://dev.openstax.org',
+    baseURL: BASE_URL ? BASE_URL : 'https://dev.openstax.org',
+    trace: 'on-first-retry',
   },
 }
 
