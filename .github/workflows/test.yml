@@ -14,9 +14,4 @@ jobs:
     - run: npm ci
     - run: npx playwright install-deps
     - run: npx playwright install
-    - name: layout check
-      run: |
-        ls -lsa
-        ls -lsa tests
-        ls -lsa tests/labs
     - run: npm run test
