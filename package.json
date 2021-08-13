@@ -4,21 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "debug": "DEBUG",
+    "coverage": "nyc npx playwright test ./tests/code/*.{js,ts,tsx} --project=\"Desktop Chrome\"",
+    "debug": "PWDEBUG=console npx playwright test",
     "lint": "eslint '**/**/*.{js,ts,tsx}' --quiet --fix",
-    "test": "npx playwright test --workers 5"
+    "test": "npx playwright test ./tests/labs/*.{js,ts,tsx} --workers 5"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@playwright/test": "^1.13.1",
+    "@types/faker": "^5.5.8",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
+    "axios": "^0.21.1",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.2"
+    "faker": "^5.5.3",
+    "nyc": "^15.1.0",
+    "prettier": "^2.3.2",
+    "source-map-support": "^0.4.18",
+    "ts-node": "^10.2.0"
   },
   "husky": {
     "hooks": {

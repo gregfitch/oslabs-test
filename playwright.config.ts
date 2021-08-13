@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from 'playwright'
 
