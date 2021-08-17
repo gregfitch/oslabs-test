@@ -20,7 +20,7 @@ const test = base.extend<BaseURL>({
         await use(`https://accounts-${INSTANCE}.openstax.org`)
       }
     } else if (ACCOUNTS) {
-      await use(ACCOUNTS.endsWith('/') ? ACCOUNTS.slice(0, ACCOUNTS.length - 2) : ACCOUNTS)
+      await use(ACCOUNTS.endsWith('/') ? ACCOUNTS.slice(0, ACCOUNTS.length - 1) : ACCOUNTS)
     } else {
       await use('https://accounts-dev.openstax.org')
     }
@@ -33,7 +33,7 @@ const test = base.extend<BaseURL>({
         await use(`https://${INSTANCE}.openstax.org`)
       }
     } else if (WEB) {
-      await use(WEB.endsWith('/') ? WEB.slice(0, WEB.length - 2) : WEB)
+      await use(WEB.endsWith('/') ? WEB.slice(0, WEB.length - 1) : WEB)
     } else {
       await use('https://dev.openstax.org')
     }
