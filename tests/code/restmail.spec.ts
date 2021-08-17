@@ -114,7 +114,6 @@ test('RestMail received mail from Accounts', async ({ page }) => {
   await page.check('#signup_terms_accepted')
   await page.click('text=Continue')
   expect(page.url()).toBe('https://accounts-dev.openstax.org/i/signup/student/email_verification_form')
-
   const messages = await checkRestmail(student.username)
   expect(messages).toHaveLength(1)
 })

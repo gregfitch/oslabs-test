@@ -1,5 +1,6 @@
-import { Student } from '../../src/utilities/user'
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { accountsUserSignup, rexUserSignup, Student, webUserSignup } from '../../src/utilities/user'
+import test from '../../src/fixtures/base'
 
 test('generate new student information to use with Accounts', async () => {
   const defaultDomain = 'restmail.net'
@@ -27,4 +28,28 @@ test('generate new student information to use with Accounts and log it', async (
   expect(student.email.length).toBeGreaterThanOrEqual(10 + otherDomain.length)
   expect(student.email).toBe(`${username}@${otherDomain}`)
   expect(student.password).toHaveLength(12)
+})
+
+test('student sign up from Accounts', async ({ accountsBaseURL, page }) => {
+  const student = await accountsUserSignup(page, accountsBaseURL)
+  const accountName = await page.textContent('#name')
+  const email = await page.textContent('.verified .value')
+  expect(page.url()).toBe(`${accountsBaseURL}/i/profile`)
+  expect(accountName).toBe(`${student.first} ${student.last}`)
+  expect(email).toBe(student.email)
+})
+
+test('student sign up from Web', async ({ webBaseURL, page }) => {
+  const student = await webUserSignup(page, webBaseURL)
+  const menuName = await page.textContent('[id^="menulabel-Hi "]')
+  expect(page.url()).toBe(`${webBaseURL}/`)
+  expect(menuName).toBe(`Hi ${student.first}`)
+})
+
+test('student sign up from REx', async ({ webBaseURL, page }) => {
+  const collegeAlgebraURL = `${webBaseURL}/books/college-algebra/pages/1-introduction-to-prerequisites`
+  const student = await rexUserSignup(page, collegeAlgebraURL)
+  const menuName = await page.textContent('[data-testid=user-nav-toggle]')
+  expect(page.url()).toBe(collegeAlgebraURL)
+  expect(menuName).toBe(`Hi ${student.first}`)
 })

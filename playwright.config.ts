@@ -43,7 +43,7 @@ const config: PlaywrightTestConfig = {
   retries: 1,
   use: {
     baseURL: BASE_URL ? BASE_URL : 'https://dev.openstax.org',
-    trace: 'on-first-retry',
+    trace: 'on',
   },
 }
 
