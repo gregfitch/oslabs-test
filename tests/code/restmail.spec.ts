@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect } from '@playwright/test'
+import test from '../../src/fixtures/base'
 import { Student } from '../../src/utilities/user'
 import { EmailMessageData, checkRestmail, getPin } from '../../src/utilities/restmail'
 
@@ -104,17 +105,16 @@ test('email message data sent a complete object', async () => {
   expect(message.to).toBe(completeData.to)
 })
 
-test('RestMail received mail from Accounts', async ({ page }) => {
+test('RestMail received mail from Accounts', async ({ accountsBaseURL, page }) => {
   const student = new Student()
-  await page.goto('https://accounts-dev.openstax.org/i/signup/student')
+  await page.goto(`${accountsBaseURL}/i/signup/student`)
   await page.fill('[placeholder="First name"]', student.first)
   await page.fill('[placeholder="Last name"]', student.last)
   await page.fill('[placeholder="me@myemail.com"]', student.email)
   await page.fill('[placeholder="Password"]', student.password)
   await page.check('#signup_terms_accepted')
   await page.click('text=Continue')
-  expect(page.url()).toBe('https://accounts-dev.openstax.org/i/signup/student/email_verification_form')
-
+  expect(page.url()).toBe(`${accountsBaseURL}/i/signup/student/email_verification_form`)
   const messages = await checkRestmail(student.username)
   expect(messages).toHaveLength(1)
 })

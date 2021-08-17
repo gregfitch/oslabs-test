@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coverage": "nyc npx playwright test ./tests/code/*.{js,ts,tsx} --project=\"Desktop Chrome\"",
+    "ci-coverage": "nyc --reporter=lcov npx playwright test tests/code --project=\"Desktop Chrome\"",
+    "coverage": "nyc npx playwright test tests/code --project=\"Desktop Chrome\"",
     "debug": "PWDEBUG=console npx playwright test",
     "lint": "eslint '**/**/*.{js,ts,tsx}' --quiet --fix",
     "test": "npx playwright test tests/labs --workers 5"
@@ -14,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@playwright/test": "^1.13.1",
+    "@playwright/test": "^1.14.0",
     "@types/faker": "^5.5.8",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
@@ -39,6 +40,6 @@
     ]
   },
   "dependencies": {
-    "playwright": "^1.13.1"
+    "playwright": "^1.14.0"
   }
 }
