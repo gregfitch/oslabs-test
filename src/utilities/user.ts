@@ -1,5 +1,5 @@
 import faker from 'faker'
-import { Page } from 'playwright'
+import { Page } from '@playwright/test'
 import { checkRestmail, getPin } from './restmail'
 
 class Student {
