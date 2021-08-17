@@ -44,17 +44,15 @@ async function accountsUserSignup(page: Page, url: string, student: Student = ne
 }
 
 async function rexUserSignup(page: Page, url: string, student: Student = new Student()): Promise<Student> {
-  if (url) {
-    await page.goto(url)
-  }
+  /* istanbul ignore else */
+  if (url) await page.goto(url)
   await page.click('[data-testid="nav-login"]')
   return accountsUserSignup(page, null, student)
 }
 
 async function webUserSignup(page: Page, url: string, student: Student = new Student()): Promise<Student> {
-  if (url) {
-    await page.goto(url)
-  }
+  /* istanbul ignore else */
+  if (url) await page.goto(url)
   await Promise.all([page.waitForNavigation(), page.click('text=Log in')])
   return accountsUserSignup(page, null, student)
 }
