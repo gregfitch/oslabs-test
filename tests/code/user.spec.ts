@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { accountsUserSignup, rexUserSignup, Student, webUserSignup } from '../../src/utilities/user'
+import { Student, accountsUserSignup, rexUserSignup, webUserSignup } from '../../src/utilities/user'
 import test from '../../src/fixtures/base'
 
 test('generate new student information to use with Accounts', async () => {
