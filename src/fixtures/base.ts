@@ -9,7 +9,7 @@ type BaseURL = {
 const INSTANCE = process.env.INSTANCE
 const ACCOUNTS = process.env.ACCOUNTS_BASE_URL
 const WEB = process.env.WEB_BASE_URL
-const production = ['prod', 'Prod', 'Production']
+const production = ['prod', 'Prod', 'production', 'Production']
 
 const test = base.extend<BaseURL>({
   accountsBaseURL: async ({}, use) => {
