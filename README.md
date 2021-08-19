@@ -1,16 +1,12 @@
 # oslabs-test
 Automated testing for OpenStax Labs
 
-![Labs Tests](https://github.com/gregfitch/oslabs-test/actions/workflows/test.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/gregfitch/oslabs-test/badge.svg?branch=main)](https://coveralls.io/github/gregfitch/oslabs-test?branch=main)
+[![Labs Tests](https://github.com/gregfitch/oslabs-test/actions/workflows/test.yml/badge.svg)] [![Coverage Status](https://coveralls.io/repos/github/gregfitch/oslabs-test/badge.svg?branch=main)](https://coveralls.io/github/gregfitch/oslabs-test?branch=main)
 
 # Run the tests
 ---
 
-### Install Git and NPM
-
-`sudo apt install git`
-
-`sudo apt install npm`
+*Testing requires access to [git](https://git-scm.com/downloads), [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and (for simple testing) [Docker](https://docs.docker.com/engine/install/).*
 
 ### Clone the test repo
 
@@ -43,3 +39,11 @@ Run against a specific Accounts or Website URL
 `ACCOUNTS_BASE_URL=https://accounts-temp-instance.openstax.org npm run test`
 
 `WEB_BASE_URL=https://temp-instance.openstax.org npm run test`
+
+# Docker
+
+The tests may also be run through Docker (*note: by default it runs things through the Dev instance*)
+
+`docker build . -t <tag_name>`
+
+`docker run --rm <tag_name>`
