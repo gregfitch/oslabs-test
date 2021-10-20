@@ -40,10 +40,10 @@ const config: PlaywrightTestConfig = {
     },
   ],
   reporter: 'list',
-  retries: 1,
+  retries: 0,
   use: {
-    baseURL: BASE_URL ? BASE_URL : 'https://dev.openstax.org',
-    trace: 'on-first-retry',
+    baseURL: BASE_URL ? BASE_URL : 'https://staging.openstax.org',
+    trace: 'retain-on-failure',
   },
 }
 

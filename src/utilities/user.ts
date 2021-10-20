@@ -25,7 +25,7 @@ class Student {
   private genRandomHex = (size) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
 }
 
-async function accountsUserSignup(page: Page, url: string, student: Student = new Student()): Promise<Student> {
+async function accountsUserSignup(page: Page, url = '', student: Student = new Student()): Promise<Student> {
   if (url) await page.goto(url)
   await page.click('text=Sign up')
   await page.click('text=Student')
@@ -50,6 +50,14 @@ async function rexUserSignup(page: Page, url: string, student: Student = new Stu
   return accountsUserSignup(page, null, student)
 }
 
+async function userSignIn(page: Page, student: Student = new Student()): Promise<Student> {
+  await page.click('text=Sign in')
+  await page.fill('[placeholder="me@myemail.com"]', student.email)
+  await page.fill('[placeholder="Password"]', student.password)
+  await Promise.all([page.waitForNavigation(), page.click('text=Continue')])
+  return student
+}
+
 async function webUserSignup(page: Page, url: string, student: Student = new Student()): Promise<Student> {
   /* istanbul ignore else */
   if (url) await page.goto(url)
@@ -57,4 +65,4 @@ async function webUserSignup(page: Page, url: string, student: Student = new Stu
   return accountsUserSignup(page, null, student)
 }
 
-export { Student, accountsUserSignup, rexUserSignup, webUserSignup }
+export { Student, accountsUserSignup, rexUserSignup, userSignIn, webUserSignup }

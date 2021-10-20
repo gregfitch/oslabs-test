@@ -34,9 +34,11 @@ Run against another instance set (expected options: `dev`, `qa`, `staging`, `pro
 
 `INSTANCE=qa npm run test`
 
-Run against a specific Accounts or Website URL
+Run against a specific Accounts, Kinetic, or Website URL
 
 `ACCOUNTS_BASE_URL=https://accounts-temp-instance.openstax.org npm run test`
+
+`KINETIC_BASE_URL=https://temp-instance.kinetic.openstax.org npm run test`
 
 `WEB_BASE_URL=https://temp-instance.openstax.org npm run test`
 
