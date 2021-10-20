@@ -2,12 +2,7 @@ import { expect } from '@playwright/test'
 import { userSignIn } from '../../src/utilities/user'
 import { accountsUserSignup, test } from './helpers'
 
-test('new user sign up @e2e @C639507', async ({
-  accountsBaseURL,
-  baseURL,  // eslint-disable-line
-  kineticBaseURL,
-  page,
-}) => {
+test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineticBaseURL, page }) => {  // eslint-disable-line
   // Given: a user viewing the Web landing page for kinetic
   await page.goto('/general/labs')
   // When: they click the 'Sign up' button
