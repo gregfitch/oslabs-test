@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test'
 import { userSignIn } from '../../src/utilities/user'
+import { generalDemographicSurvey } from '../../src/utilities/utilities'
 import { accountsUserSignup, test } from './helpers'
 
 test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineticBaseURL, page }) => {  // eslint-disable-line
@@ -19,7 +20,7 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   expect(surveyTitle).toHaveText('General Demographic Survey')
   // When: they complete the survey
   // And:  click the 'Return to view other studies' button
-
+  await generalDemographicSurvey(page)
   // Then: the modal is closed
   // And:  a green completion checkmark is displayed on the demographic survey card
   // And:  the demographic survey card is greyed out and inactive
@@ -57,8 +58,10 @@ test('returning user who did not complete the demographic survey see it again @C
   expect(surveyTitle2).toHaveText('General Demographic Survey')
 })
 
-test('returning user who completed the demographic survey @C639509', async ({ page }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+test('returning user who completed the demographic survey @C639509', async ({ baseURL, page }) => {
   // Given: a user viewing the Web landing page
+  await page.goto('/kinetic')
   // When: they click the "Log in" button
   // Then: the Accounts log in page is displayed in a new tab
   // When: they complete the log in process
@@ -67,14 +70,16 @@ test('returning user who completed the demographic survey @C639509', async ({ pa
   // And:  the survey card is greyed out and inactive
 })
 
-test('current user selects a survey @C639510', async ({ page }) => {
+test('current user selects a survey @C639510', async ({ kineticBaseURL, page }) => {
   // Given: a logged in user viewing the Kinetic participant dashboard
+  await page.goto(kineticBaseURL)
   // When: they select a survey
   // Then: the survey modal is opened
 })
 
-test('current user selects a study @C639511', async ({ page }) => {
+test('current user selects a study @C639511', async ({ kineticBaseURL, page }) => {
   // Given: a logged in user viewing the Kinetic participant dashboard
+  await page.goto(kineticBaseURL)
   // When: they select a study
   // Then: the study details page is displayed
   // When: they click the "Begin study" button
