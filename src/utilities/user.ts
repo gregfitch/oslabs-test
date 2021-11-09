@@ -51,7 +51,7 @@ async function rexUserSignup(page: Page, url: string, student: Student = new Stu
 }
 
 async function userSignIn(page: Page, student: Student = new Student()): Promise<Student> {
-  await page.click('text=Sign in')
+  await page.click('text=log in')
   await page.fill('[placeholder="me@myemail.com"]', student.email)
   await page.fill('[placeholder="Password"]', student.password)
   await Promise.all([page.waitForNavigation(), page.click('text=Continue')])

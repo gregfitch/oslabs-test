@@ -1,7 +1,7 @@
 import test from '../../src/fixtures/base'
 import { EmailMessageData, checkRestmail, getPin } from '../../src/utilities/restmail'
-import { Student, accountsUserSignup, rexUserSignup, webUserSignup } from '../../src/utilities/user'
-import { closeExtras, sleep } from '../../src/utilities/utilities'
+import { Student, accountsUserSignup, rexUserSignup, userSignIn, webUserSignup } from '../../src/utilities/user'
+import { closeExtras, generalDemographicSurvey, randomChoice, sleep } from '../../src/utilities/utilities'
 
 export {
   EmailMessageData,
@@ -9,9 +9,12 @@ export {
   accountsUserSignup,
   checkRestmail,
   closeExtras,
+  generalDemographicSurvey,
   getPin,
+  randomChoice,
   rexUserSignup,
   sleep,
   test,
+  userSignIn,
   webUserSignup,
 }

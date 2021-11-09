@@ -9,7 +9,7 @@ test('kinetic landing page is available @C639517', async ({ baseURL, page }) => 
   // When: they click the Kinetic link
   // await page.click('')
   // Then: the Kinetic landing page is displayed
-  expect(page.url()).toBe(`${baseURL}/general/kinetic`)
+  expect(page.url()).toBe(`${baseURL}/kinetic`)
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,11 +1,9 @@
 import { expect } from '@playwright/test'
-import { userSignIn } from '../../src/utilities/user'
-import { generalDemographicSurvey } from '../../src/utilities/utilities'
-import { accountsUserSignup, test } from './helpers'
+import { accountsUserSignup, generalDemographicSurvey, randomChoice, test, userSignIn } from './helpers'
 
 test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineticBaseURL, page }) => {  // eslint-disable-line
   // Given: a user viewing the Web landing page for Kinetic
-  await page.goto('/general/labs')
+  await page.goto('/kinetic')
   // When: they click the 'Sign up' button
   const [newTab] = await Promise.all([page.waitForEvent('popup'), page.click('text=Sign up')])
   // Then: the Accounts log in page is displayed in a new tab
@@ -15,23 +13,30 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   await accountsUserSignup(newTab)
   // Then: they are taken to the Kinetic participant dashboard
   // And:  the demographic survey modal is displayed
-  expect(newTab.url()).toBe(`${kineticBaseURL}/studies`)
+  expect(newTab.url()).toBe(`${kineticBaseURL}/`)
   const surveyTitle = newTab.locator('.modal-title')
-  expect(surveyTitle).toHaveText('General Demographic Survey')
+  await expect(surveyTitle).toHaveText('Demographic Survey')
   // When: they complete the survey
   // And:  click the 'Return to view other studies' button
-  await generalDemographicSurvey(page)
+  await generalDemographicSurvey(newTab)
   // Then: the modal is closed
   // And:  a green completion checkmark is displayed on the demographic survey card
   // And:  the demographic survey card is greyed out and inactive
-
+  const modalNotFound = await newTab.$('body.model-open'),
+    surveyCompletion = await newTab.locator('h5 ~ svg [fill=green]'),
+    surveyCardDisabled = await newTab.locator('.card[aria-disabled=true]')
+  expect(modalNotFound).toBe(null)
+  expect(surveyCompletion).toBeTruthy()
+  expect(surveyCardDisabled).toBeTruthy()
   // When: they select a study
-
+  const studies = await newTab.$$('text=Research Studies >> .card[aria-disabled=false]')
+  await randomChoice(studies).click()
   // Then: the study details page is displayed
-
+  expect(newTab.url()).toContainText('/details/')
   // When: they click the 'Begin study' button
-
+  await Promise.all([newTab.click('text=Begin study')])
   // Then: they are taken to the Qualtrics study
+  expect(newTab.url()).toContainText('qualtrics.com')
 })
 
 test('returning user who did not complete the demographic survey see it again @C639508', async ({
@@ -44,8 +49,8 @@ test('returning user who did not complete the demographic survey see it again @C
   // Given: a user viewing the Kinetic home page
   await page.goto(kineticBaseURL)
   // Then: the demographic survey modal is displayed
-  const surveyTitle = page.locator('.modal-title')
-  expect(surveyTitle).toHaveText('General Demographic Survey')
+  const surveyTitle = page.locator('div[role="document"] >> text=General Demographic Survey')
+  expect(surveyTitle).toBeTruthy()
   // When: they log out
   // And:  open the Kinetic home page
   // And:  log back in
@@ -54,8 +59,8 @@ test('returning user who did not complete the demographic survey see it again @C
   await page.goto(kineticBaseURL)
   await userSignIn(page, student)
   // Then: the demographic survey modal is displayed
-  const surveyTitle2 = page.locator('.modal-title')
-  expect(surveyTitle2).toHaveText('General Demographic Survey')
+  const surveyTitle2 = page.locator('div[role="document"] >> text=General Demographic Survey')
+  expect(surveyTitle2).toBeTruthy()
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

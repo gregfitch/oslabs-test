@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { ElementHandle, Page } from '@playwright/test'
 import {
   setBackground,
   setBirthYear,
@@ -32,30 +32,37 @@ async function generalDemographicSurvey(
   freeLunch = '',
   zipCode = '',
 ): Promise<void> {
-  const frame = await page.$('#study')
-  const frameUrl = await frame.getAttribute('src')
+  await page.waitForSelector('#study')
+  const modalBody = await page.$('#study')
+  const frame = await modalBody.contentFrame()
   // introduction
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator('text=Next →').click()
   // year born
-  await setBirthYear(page, frameUrl, birthYear)
+  await setBirthYear(frame, birthYear)
   // gender identity
-  await setGenderChoice(page, frameUrl, gender)
+  await setGenderChoice(frame, gender)
   // racial or ethnic background
-  await setBackground(page, frameUrl, racial)
+  await setBackground(frame, racial)
   // first language
-  await setLanguage(page, frameUrl, language)
+  await setLanguage(frame, language)
   // education level
-  await setEducation(page, frameUrl, education)
+  await setEducation(frame, education)
   // parents' college experience
-  await setParentEducation(page, frameUrl, parentsEducation)
+  await setParentEducation(frame, parentsEducation)
   // employment status
-  await setEmployment(page, frameUrl, employment)
+  await setEmployment(frame, employment)
   // ever received free school lunches
-  await setLunchStatus(page, frameUrl, freeLunch)
+  await setLunchStatus(frame, freeLunch)
   // current zip code
-  await setZipCode(page, frameUrl, zipCode)
+  await setZipCode(frame, zipCode)
   // completion screen
-  await page.frame({ url: frameUrl }).click('text=Return to view other studies')
+  const returnButton = frame.locator('text=Return to view other studies')
+  await returnButton.click()
+}
+
+function randomChoice(list: ElementHandle[]): ElementHandle {
+  const option = Math.floor(Math.random() * list.length)
+  return list[option]
 }
 
 function sleep(seconds = 1.0): Promise<unknown> {
@@ -64,4 +71,4 @@ function sleep(seconds = 1.0): Promise<unknown> {
   })
 }
 
-export { closeExtras, generalDemographicSurvey, sleep }
+export { closeExtras, generalDemographicSurvey, randomChoice, sleep }

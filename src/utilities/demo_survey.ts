@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Frame } from '@playwright/test'
 
 const genderOptions = ['Male', 'Female', 'Non-binary / third gender', 'Prefer not to say']
 const backgrounds = [
@@ -46,7 +46,7 @@ const collegeParents = [
 const employmentOptions = ['Student', 'Employed', 'Homemaker or caregiver', 'Retired', 'Prefer not to say']
 const lunchOptions = ['Yes', 'No', 'Prefer not to say']
 
-async function setBirthYear(page: Page, frameUrl: string, birthYear = ''): Promise<void> {
+async function setBirthYear(frame: Frame, birthYear = ''): Promise<void> {
   let year = '0000'
   if (birthYear) {
     year = `${birthYear}`
@@ -57,31 +57,32 @@ async function setBirthYear(page: Page, frameUrl: string, birthYear = ''): Promi
       year = `${currentYear - Math.floor(Math.random() * 75)}`
     }
   }
-  await page.frame({ url: frameUrl }).fill('input[name^=QR~]', year)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator('input[name^="QR~"]').fill(year)
+  await frame.locator('text=Next →').click()
 }
 
-async function setGenderChoice(page: Page, frameUrl: string, gender = ''): Promise<void> {
+async function setGenderChoice(frame: Frame, gender = ''): Promise<void> {
   let genderChoice = gender
   if (!genderOptions.includes(gender)) {
     const use = Math.floor(Math.random() * genderOptions.length)
     genderChoice = genderOptions[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${genderChoice}`)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  const label = genderChoice === 'Male' ? '//label[span[text()="Male"]]' : `label:has-text("${genderChoice}")`
+  await frame.locator(label).click()
+  await frame.locator('text=Next →').click()
 }
 
-async function setBackground(page: Page, frameUrl: string, racial = ''): Promise<void> {
+async function setBackground(frame: Frame, racial = ''): Promise<void> {
   let background = racial
   if (!backgrounds.includes(racial)) {
     const use = Math.floor(Math.random() * backgrounds.length)
     background = backgrounds[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${background}`)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator(`label:has-text("${background}")`).click()
+  await frame.locator('text=Next →').click()
 }
 
-async function setLanguage(page: Page, frameUrl: string, language = ''): Promise<void> {
+async function setLanguage(frame: Frame, language = ''): Promise<void> {
   let firstLanguage = language,
     otherLanguage = language
   if (!primaryLanguages.includes(language)) {
@@ -94,34 +95,34 @@ async function setLanguage(page: Page, frameUrl: string, language = ''): Promise
       firstLanguage = 'Other'
     }
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${firstLanguage}`)
+  await frame.locator(`label:has-text("${firstLanguage}")`).click()
   if (firstLanguage === 'Other') {
-    await page.frame({ url: frameUrl }).fill('input[name^=QR~]', otherLanguage)
+    await frame.locator('.TextEntryBox').fill(otherLanguage)
   }
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator('text=Next →').click()
 }
 
-async function setEducation(page: Page, frameUrl: string, education = ''): Promise<void> {
+async function setEducation(frame: Frame, education = ''): Promise<void> {
   let userLevel = education
   if (!educationLevels.includes(education)) {
     const use = Math.floor(Math.random() * educationLevels.length)
     userLevel = educationLevels[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${userLevel}`)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator(`label:has-text("${userLevel}")`).click()
+  await frame.locator('text=Next →').click()
 }
 
-async function setParentEducation(page: Page, frameUrl: string, parentsEducation = ''): Promise<void> {
+async function setParentEducation(frame: Frame, parentsEducation = ''): Promise<void> {
   let parentLevel = parentsEducation
   if (!collegeParents.includes(parentsEducation)) {
     const use = Math.floor(Math.random() * collegeParents.length)
     parentLevel = collegeParents[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${parentLevel}`)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator(`label:has-text("${parentLevel}")`).click()
+  await frame.locator('text=Next →').click()
 }
 
-async function setEmployment(page: Page, frameUrl: string, employment = ''): Promise<void> {
+async function setEmployment(frame: Frame, employment = ''): Promise<void> {
   let employed = employment
   if (!employmentOptions.includes(employment)) {
     employed = 'Other'
@@ -129,35 +130,36 @@ async function setEmployment(page: Page, frameUrl: string, employment = ''): Pro
     const use = Math.floor(Math.random() * employmentOptions.length)
     employed = collegeParents[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${employed}`)
+  await frame.locator(`label:has-text("${employed}")`).click()
   if (employed === 'Other') {
-    await page.frame({ url: frameUrl }).fill('input[name^=QR~]', employment)
+    await frame.locator('.TextEntryBox').fill(employment)
   }
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator('text=Next →').click()
 }
 
-async function setLunchStatus(page: Page, frameUrl: string, freeLunch = ''): Promise<void> {
+async function setLunchStatus(frame: Frame, freeLunch = ''): Promise<void> {
   let lunchChoice = freeLunch
   if (!lunchOptions.includes(lunchChoice)) {
     const use = Math.floor(Math.random() * lunchOptions.length)
     lunchChoice = lunchOptions[use]
   }
-  await page.frame({ url: frameUrl }).click(`label:has-text=${lunchChoice}`)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  const label = lunchChoice === 'No' ? '//label[span[text()="No"]]' : `label:has-text("${lunchChoice}")`
+  await frame.locator(label).click()
+  await frame.locator('text=Next →').click()
 }
 
-async function setZipCode(page: Page, frameUrl: string, zipCode = ''): Promise<void> {
+async function setZipCode(frame: Frame, zipCode = ''): Promise<void> {
   let zip = '00000'
   if (zipCode) {
     zip = `${zipCode}`
   } else {
     const use = Math.floor(Math.random() * 5)
     if (use > 0) {
-      zip = `${1 + Math.floor(Math.random() * 99998)}`
+      zip = String(1 + Math.floor(Math.random() * 99998))
     }
   }
-  await page.frame({ url: frameUrl }).fill('input[name^=QR~]', zip)
-  await page.frame({ url: frameUrl }).click('text=Next →')
+  await frame.locator('.InputText').fill(zip.padStart(5, '0'))
+  await frame.locator('text=Next →').click()
 }
 
 export {

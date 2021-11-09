@@ -37,7 +37,7 @@ const test = base.extend<BaseURL>({
     } else if (KINETIC) {
       await use(KINETIC.endsWith('/') ? KINETIC.slice(0, KINETIC.length - 1) : KINETIC)
     } else {
-      await use('https://staging.KINETIC.openstax.org')
+      await use('https://staging.kinetic.openstax.org')
     }
   },
   webBaseURL: async ({}, use) => {
