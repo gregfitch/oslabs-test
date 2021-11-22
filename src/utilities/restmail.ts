@@ -69,7 +69,7 @@ async function checkMailbox(user: string, wait: boolean, delay: number) {
   return messages.data.map((x: Message) => new EmailMessageData(x))
 }
 
-async function checkRestmail(user: string, retries = 0, maxRetries = 60, delay = 0.5): Promise<EmailMessageData[]> {
+async function checkRestmail(user: string, retries = 0, maxRetries = 120, delay = 0.5): Promise<EmailMessageData[]> {
   if (retries > maxRetries) {
     throw new Error(`Message not received in time (${maxRetries * delay} seconds)`)
   }

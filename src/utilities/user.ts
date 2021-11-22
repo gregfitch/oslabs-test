@@ -22,7 +22,8 @@ class Student {
     }
   }
 
-  private genRandomHex = (size) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
+  private genRandomHex = (size: number) =>
+    [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
 }
 
 async function accountsUserSignup(page: Page, url = '', student: Student = new Student()): Promise<Student> {

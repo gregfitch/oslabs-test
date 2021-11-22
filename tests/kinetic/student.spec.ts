@@ -5,7 +5,7 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   // Given: a user viewing the Web landing page for Kinetic
   await page.goto('/kinetic')
   // When: they click the 'Sign up' button
-  const [newTab] = await Promise.all([page.waitForEvent('popup'), page.click('text=Sign up')])
+  const [newTab] = await Promise.all([page.waitForEvent('popup'), page.click('text=Start a free account')])
   // Then: the Accounts log in page is displayed in a new tab
   expect(newTab.url()).toBe(`${accountsBaseURL}/i/signup/?r=${kineticBaseURL}`)
   // When: they completed the sign up process
@@ -13,7 +13,7 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   await accountsUserSignup(newTab)
   // Then: they are taken to the Kinetic participant dashboard
   // And:  the demographic survey modal is displayed
-  expect(newTab.url()).toBe(`${kineticBaseURL}/`)
+  expect(newTab.url()).toMatch(new RegExp(`${kineticBaseURL}\/(studies)?`))
   const surveyTitle = newTab.locator('.modal-title')
   await expect(surveyTitle).toHaveText('Demographic Survey')
   // When: they complete the survey

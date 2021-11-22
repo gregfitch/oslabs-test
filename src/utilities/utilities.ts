@@ -13,10 +13,13 @@ import {
 
 async function closeExtras(page: Page): Promise<void> {
   try {
-    await page.click('text=Got it!', { timeout: 3000 })
+    await page.click('text=Got it!', { timeout: 1000 })
   } catch (error) {}
   try {
-    await page.click('._pi_closeButton', { timeout: 3000 })
+    await page.click('lower-sticky-note-content > .put-away', { timeout: 1000 })
+  } catch (error) {}
+  try {
+    await page.click('._pi_closeButton', { timeout: 1000 })
   } catch (error) {}
 }
 
@@ -36,7 +39,8 @@ async function generalDemographicSurvey(
   const modalBody = await page.$('#study')
   const frame = await modalBody.contentFrame()
   // introduction
-  await frame.locator('text=Next →').click()
+  await Promise.all([frame.locator('text=Next →').click(), frame.waitForNavigation()])
+  //await frame.locator('text=Next →').click()
   // year born
   await setBirthYear(frame, birthYear)
   // gender identity
@@ -56,8 +60,7 @@ async function generalDemographicSurvey(
   // current zip code
   await setZipCode(frame, zipCode)
   // completion screen
-  const returnButton = frame.locator('text=Return to view other studies')
-  await returnButton.click()
+  await page.click('.navbar a', { force: true })
 }
 
 function randomChoice(list: ElementHandle[]): ElementHandle {

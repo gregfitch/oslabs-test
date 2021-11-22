@@ -19,7 +19,7 @@ test('logged in users are taken to kinetic @C640301', async ({ accountsBaseURL, 
   await page.goto('/kinetic')
   await closeExtras(page)
   // When: they click the 'View Kinetic studies' button
-  const [newPage] = await Promise.all([page.waitForEvent('popup'), page.click('text=View Kinetic studies')])
+  const [newPage] = await Promise.all([page.waitForEvent('popup'), page.click('text=View available studies')])
   // Then: the Kinetic home page is displayed in a new tab
   expect(newPage.url()).toBe(`${kineticBaseURL}/`)
 })
