@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Frame } from '@playwright/test'
 
 const genderOptions = ['Male', 'Female', 'Non-binary / third gender', 'Prefer not to say']
@@ -13,20 +14,20 @@ const backgrounds = [
 ]
 const primaryLanguages = ['English', 'Spanish', 'Prefer not to say']
 const otherLanguages = [
-  'English',
-  '普通话',
-  'हिंदी',
-  'Spanish',
-  'español',
-  'français',
-  'عربي',
-  'বাংলা',
-  'русский',
-  'português',
-  'Indonesian',
-  'اردو',
-  'Deutsch',
-  'Prefer not to say',
+  ['English', ''],
+  ['Other', '普通话'],
+  ['Other', 'हिंदी'],
+  ['Spanish', ''],
+  ['Other', 'español'],
+  ['Other', 'français'],
+  ['Other', 'عربي'],
+  ['Other', 'বাংলা'],
+  ['Other', 'русский'],
+  ['Other', 'português'],
+  ['Other', 'Indonesian'],
+  ['Other', 'اردو'],
+  ['Other', 'Deutsch'],
+  ['Prefer not to say', ''],
 ]
 const educationLevels = [
   'Have not completed high school',
@@ -46,12 +47,13 @@ const collegeParents = [
 const employmentOptions = ['Student', 'Employed', 'Homemaker or caregiver', 'Retired', 'Prefer not to say']
 const lunchOptions = ['Yes', 'No', 'Prefer not to say']
 
-async function setBirthYear(frame: Frame, birthYear = ''): Promise<void> {
+async function setBirthYear(frame: Frame, birthYear: string) {
   let year = '0000'
   if (birthYear) {
     year = `${birthYear}`
   } else {
     const use = Math.floor(Math.random() * 5)
+    /* istanbul ignore else */
     if (use > 0) {
       const currentYear = new Date().getFullYear()
       year = `${currentYear - Math.floor(Math.random() * 75)}`
@@ -61,7 +63,7 @@ async function setBirthYear(frame: Frame, birthYear = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setGenderChoice(frame: Frame, gender = ''): Promise<void> {
+async function setGenderChoice(frame: Frame, gender: string) {
   let genderChoice = gender
   if (!genderOptions.includes(gender)) {
     const use = Math.floor(Math.random() * genderOptions.length)
@@ -72,7 +74,7 @@ async function setGenderChoice(frame: Frame, gender = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setBackground(frame: Frame, racial = ''): Promise<void> {
+async function setBackground(frame: Frame, racial: string) {
   let background = racial
   if (!backgrounds.includes(racial)) {
     const use = Math.floor(Math.random() * backgrounds.length)
@@ -82,18 +84,15 @@ async function setBackground(frame: Frame, racial = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setLanguage(frame: Frame, language = ''): Promise<void> {
+async function setLanguage(frame: Frame, language: string) {
   let firstLanguage = language,
     otherLanguage = language
-  if (!primaryLanguages.includes(language)) {
+  if (language && !primaryLanguages.includes(language)) {
     firstLanguage = 'Other'
-  } else {
+  } else if (!language) {
     const use = Math.floor(Math.random() * otherLanguages.length)
-    firstLanguage = otherLanguages[use]
-    if (!primaryLanguages.includes(firstLanguage)) {
-      otherLanguage = firstLanguage
-      firstLanguage = 'Other'
-    }
+    firstLanguage = otherLanguages[use][0]
+    otherLanguage = otherLanguages[use][1]
   }
   await frame.locator(`label:has-text("${firstLanguage}")`).click()
   if (firstLanguage === 'Other') {
@@ -102,7 +101,7 @@ async function setLanguage(frame: Frame, language = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setEducation(frame: Frame, education = ''): Promise<void> {
+async function setEducation(frame: Frame, education: string) {
   let userLevel = education
   if (!educationLevels.includes(education)) {
     const use = Math.floor(Math.random() * educationLevels.length)
@@ -112,7 +111,7 @@ async function setEducation(frame: Frame, education = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setParentEducation(frame: Frame, parentsEducation = ''): Promise<void> {
+async function setParentEducation(frame: Frame, parentsEducation: string) {
   let parentLevel = parentsEducation
   if (!collegeParents.includes(parentsEducation)) {
     const use = Math.floor(Math.random() * collegeParents.length)
@@ -122,13 +121,14 @@ async function setParentEducation(frame: Frame, parentsEducation = ''): Promise<
   await frame.locator('text=Next →').click()
 }
 
-async function setEmployment(frame: Frame, employment = ''): Promise<void> {
+async function setEmployment(frame: Frame, employment: string) {
   let employed = employment
-  if (!employmentOptions.includes(employment)) {
+  /* istanbul ignore else */
+  if (employment && !employmentOptions.includes(employment)) {
     employed = 'Other'
-  } else {
+  } else if (!employment) {
     const use = Math.floor(Math.random() * employmentOptions.length)
-    employed = collegeParents[use]
+    employed = employmentOptions[use]
   }
   await frame.locator(`label:has-text("${employed}")`).click()
   if (employed === 'Other') {
@@ -137,7 +137,7 @@ async function setEmployment(frame: Frame, employment = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setLunchStatus(frame: Frame, freeLunch = ''): Promise<void> {
+async function setLunchStatus(frame: Frame, freeLunch: string) {
   let lunchChoice = freeLunch
   if (!lunchOptions.includes(lunchChoice)) {
     const use = Math.floor(Math.random() * lunchOptions.length)
@@ -148,12 +148,13 @@ async function setLunchStatus(frame: Frame, freeLunch = ''): Promise<void> {
   await frame.locator('text=Next →').click()
 }
 
-async function setZipCode(frame: Frame, zipCode = ''): Promise<void> {
+async function setZipCode(frame: Frame, zipCode: string) {
   let zip = '00000'
   if (zipCode) {
     zip = `${zipCode}`
   } else {
     const use = Math.floor(Math.random() * 5)
+    /* istanbul ignore else */
     if (use > 0) {
       zip = String(1 + Math.floor(Math.random() * 99998))
     }
