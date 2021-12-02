@@ -12,14 +12,13 @@ test('kinetic landing page is available @C639517', async ({ baseURL, page }) => 
   expect(page.url()).toBe(`${baseURL}/kinetic`)
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 test('logged in users are taken to kinetic @C640301', async ({ accountsBaseURL, baseURL, kineticBaseURL, page }) => {
   // Given: a logged in user viewing the Kinetic landing page
   await accountsUserSignup(page, accountsBaseURL)
-  await page.goto('/kinetic')
+  await page.goto(`${baseURL}/kinetic`)
   await closeExtras(page)
-  // When: they click the 'View Kinetic studies' button
-  const [newPage] = await Promise.all([page.waitForEvent('popup'), page.click('text=View available studies')])
+  // When: they click the 'View available studies' button
+  await page.click('text=View available studies')
   // Then: the Kinetic home page is displayed in a new tab
-  expect(newPage.url()).toBe(`${kineticBaseURL}/`)
+  expect(page.url()).toBe(`${kineticBaseURL}/`)
 })

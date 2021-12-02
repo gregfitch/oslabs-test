@@ -49,7 +49,7 @@ test('returning user who did not complete the demographic survey see it again @C
   // Given: a user viewing the Kinetic home page
   await page.goto(kineticBaseURL)
   // Then: the demographic survey modal is displayed
-  const surveyTitle = page.locator('div[role="document"] >> text=General Demographic Survey')
+  const surveyTitle = page.locator('div[role="document"] >> text=Demographic Survey')
   expect(surveyTitle).toBeTruthy()
   // When: they log out
   // And:  open the Kinetic home page
@@ -59,7 +59,7 @@ test('returning user who did not complete the demographic survey see it again @C
   await page.goto(kineticBaseURL)
   await userSignIn(page, student)
   // Then: the demographic survey modal is displayed
-  const surveyTitle2 = page.locator('div[role="document"] >> text=General Demographic Survey')
+  const surveyTitle2 = page.locator('div[role="document"] >> text=Demographic Survey')
   expect(surveyTitle2).toBeTruthy()
 })
 
