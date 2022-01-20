@@ -1,6 +1,7 @@
 import faker from 'faker'
 import { Page } from '@playwright/test'
 import { checkRestmail, getPin } from './restmail'
+import { closeExtras } from './utilities'
 
 class Student {
   first: string
@@ -61,7 +62,10 @@ async function userSignIn(page: Page, student: Student): Promise<Student> {
 
 async function webUserSignup(page: Page, url: string, student: Student = new Student()): Promise<Student> {
   /* istanbul ignore else */
-  if (url) await page.goto(url)
+  if (url) {
+    await page.goto(url)
+    await closeExtras(page)
+  }
   await Promise.all([page.waitForNavigation(), page.click('text=Log in')])
   return accountsUserSignup(page, null, student)
 }

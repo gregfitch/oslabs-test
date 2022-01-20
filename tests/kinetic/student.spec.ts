@@ -1,10 +1,19 @@
 import { expect } from '@playwright/test'
-import { accountsUserSignup, generalDemographicSurvey, randomChoice, test, userSignIn } from './helpers'
+import {
+  accountsUserSignup,
+  closeExtras,
+  generalDemographicSurvey,
+  randomChoice,
+  sleep,
+  test,
+  userSignIn,
+} from './helpers'
 
 test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineticBaseURL, page }) => {  // eslint-disable-line
   // Given: a user viewing the Web landing page for Kinetic
   await page.goto('/kinetic')
   // When: they click the 'Sign up' button
+  await closeExtras(page)
   await page.click('text=Sign up')
   // Then: the Accounts log in page is displayed
   expect(page.url()).toBe(`${accountsBaseURL}/i/signup?r=${kineticBaseURL}/`)
@@ -23,16 +32,16 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   // And:  a green completion checkmark is displayed on the demographic survey card
   // And:  the demographic survey card is greyed out and inactive
   const modalNotFound = await page.$('body.model-open'),
-    surveyCompletion = page.locator('h5 ~ svg [fill=green]'),
-    surveyCardDisabled = page.locator('.card[aria-disabled=true]')
+    surveyCompletion = page.$('h5 ~ svg [fill=green]'),
+    surveyCardDisabled = page.$('.card[aria-disabled=true]')
   expect(modalNotFound).toBe(null)
-  expect(surveyCompletion).toBeTruthy()
-  expect(surveyCardDisabled).toBeTruthy()
+  expect(await surveyCompletion).toBeTruthy()
+  expect(await surveyCardDisabled).toBeTruthy()
   // When: they select a study
-  const studies = await page.$$('text=Research Studies >> .card[aria-disabled=false]')
+  const studies = await page.$$('.card[aria-disabled=false]')
   await randomChoice(studies).click()
   // Then: the study details page is displayed
-  expect(page.url()).toContainText('/details/')
+  expect(page.url()).toMatch(new RegExp(`${kineticBaseURL}\/(details)?\/`))
   // When: they click the 'Begin study' button
   await Promise.all([page.click('text=Begin study')])
   // Then: they are taken to the Qualtrics study
@@ -54,6 +63,8 @@ test('returning user who did not complete the demographic survey see it again @C
   // When: they log out
   // And:  open the Kinetic home page
   // And:  log back in
+  // await page.goto(accountsBaseURL)
+  await sleep(1)
   await page.goto(accountsBaseURL)
   await page.click('text=Log out')
   await page.goto(kineticBaseURL)
@@ -63,10 +74,9 @@ test('returning user who did not complete the demographic survey see it again @C
   expect(surveyTitle2).toBeTruthy()
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 test('returning user who completed the demographic survey @C639509', async ({ baseURL, page }) => {
   // Given: a user viewing the Web landing page
-  await page.goto('/kinetic')
+  await page.goto(`${baseURL}/kinetic`)
   // When: they click the "Log in" button
   // Then: the Accounts log in page is displayed in a new tab
   // When: they complete the log in process

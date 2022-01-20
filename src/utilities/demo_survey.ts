@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Frame } from '@playwright/test'
 
+const referredFrom = [
+  'Teacher directed me',
+  'Clicked a button on the OpenStax textbook',
+  'From email',
+  'From social media',
+  'Heard from a friend/peer',
+  'Other',
+]
 const genderOptions = ['Male', 'Female', 'Non-binary / third gender', 'Prefer not to say']
 const backgrounds = [
   'White',
@@ -47,6 +55,22 @@ const collegeParents = [
 const employmentOptions = ['Student', 'Employed', 'Homemaker or caregiver', 'Retired', 'Prefer not to say']
 const lunchOptions = ['Yes', 'No', 'Prefer not to say']
 
+async function setReferrer(frame: Frame, from: string) {
+  let referrer = from
+  if (from && !referredFrom.includes(from)) {
+    referrer = 'Other'
+  } else if (!from) {
+    const use = Math.floor(Math.random() * referredFrom.length)
+    referrer = referredFrom[use]
+  }
+  await frame.locator(`label:has-text("${referrer}")`).click()
+  if (referrer === 'Other') {
+    await frame.locator('textarea[name]').fill(from ? from : referrer)
+  }
+  await frame.locator(`label:has-text("${referrer}")`).click()
+  await frame.locator('#NextButton').click()
+}
+
 async function setBirthYear(frame: Frame, birthYear: string) {
   let year = '0000'
   if (birthYear) {
@@ -59,8 +83,8 @@ async function setBirthYear(frame: Frame, birthYear: string) {
       year = `${currentYear - Math.floor(Math.random() * 75)}`
     }
   }
-  await frame.locator('input[name^="QR~"]').fill(year)
-  await frame.locator('text=Next →').click()
+  await frame.locator('.ChoiceStructure > .InputText').fill(year)
+  await frame.locator('#NextButton').click()
 }
 
 async function setGenderChoice(frame: Frame, gender: string) {
@@ -71,7 +95,7 @@ async function setGenderChoice(frame: Frame, gender: string) {
   }
   const label = genderChoice === 'Male' ? '//label[span[text()="Male"]]' : `label:has-text("${genderChoice}")`
   await frame.locator(label).click()
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setBackground(frame: Frame, racial: string) {
@@ -81,7 +105,7 @@ async function setBackground(frame: Frame, racial: string) {
     background = backgrounds[use]
   }
   await frame.locator(`label:has-text("${background}")`).click()
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setLanguage(frame: Frame, language: string) {
@@ -98,7 +122,7 @@ async function setLanguage(frame: Frame, language: string) {
   if (firstLanguage === 'Other') {
     await frame.locator('.TextEntryBox').fill(otherLanguage)
   }
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setEducation(frame: Frame, education: string) {
@@ -108,7 +132,7 @@ async function setEducation(frame: Frame, education: string) {
     userLevel = educationLevels[use]
   }
   await frame.locator(`label:has-text("${userLevel}")`).click()
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setParentEducation(frame: Frame, parentsEducation: string) {
@@ -118,7 +142,7 @@ async function setParentEducation(frame: Frame, parentsEducation: string) {
     parentLevel = collegeParents[use]
   }
   await frame.locator(`label:has-text("${parentLevel}")`).click()
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setEmployment(frame: Frame, employment: string) {
@@ -134,7 +158,7 @@ async function setEmployment(frame: Frame, employment: string) {
   if (employed === 'Other') {
     await frame.locator('.TextEntryBox').fill(employment)
   }
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setLunchStatus(frame: Frame, freeLunch: string) {
@@ -145,7 +169,7 @@ async function setLunchStatus(frame: Frame, freeLunch: string) {
   }
   const label = lunchChoice === 'No' ? '//label[span[text()="No"]]' : `label:has-text("${lunchChoice}")`
   await frame.locator(label).click()
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 async function setZipCode(frame: Frame, zipCode: string) {
@@ -160,10 +184,11 @@ async function setZipCode(frame: Frame, zipCode: string) {
     }
   }
   await frame.locator('.InputText').fill(zip.padStart(5, '0'))
-  await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
 }
 
 export {
+  setReferrer,
   setBirthYear,
   setGenderChoice,
   setBackground,

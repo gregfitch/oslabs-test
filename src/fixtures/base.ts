@@ -17,14 +17,14 @@ const test = base.extend<BaseURL>({
   accountsBaseURL: async ({}, use) => {
     if (INSTANCE) {
       if (production.includes(INSTANCE)) {
-        await use(`https://accounts.openstax.org`)
+        await use(`https://openstax.org/accounts`)
       } else {
-        await use(`https://accounts-${INSTANCE}.openstax.org`)
+        await use(`https://${INSTANCE}.openstax.org/accounts`)
       }
     } else if (ACCOUNTS) {
       await use(ACCOUNTS.endsWith('/') ? ACCOUNTS.slice(0, ACCOUNTS.length - 1) : ACCOUNTS)
     } else {
-      await use('https://accounts-staging.openstax.org')
+      await use('https://staging.openstax.org/accounts')
     }
   },
   kineticBaseURL: async ({}, use) => {

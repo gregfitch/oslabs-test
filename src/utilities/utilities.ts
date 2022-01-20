@@ -8,6 +8,7 @@ import {
   setLanguage,
   setLunchStatus,
   setParentEducation,
+  setReferrer,
   setZipCode,
 } from './demo_survey'
 
@@ -21,7 +22,12 @@ async function closeExtras(page: Page, retries = 5): Promise<void> {
   try {
     await page.click('._pi_closeButton', { timeout: 500 })
   } catch (error) {}
-  const extras = await page.isVisible('.cookie-notice button, lower-sticky-note-content > .put-away, ._pi_closeButton')
+  try {
+    await page.click('.ReactModalPortal .put-away', { timeout: 500 })
+  } catch (error) {}
+  const extras = await page.isVisible(
+    '.cookie-notice button, lower-sticky-note-content > .put-away, ._pi_closeButton, .ReactModalPortal .put-away',
+  )
   /* istanbul ignore if */
   if (retries > 0 && extras) {
     await sleep(1)
@@ -31,6 +37,7 @@ async function closeExtras(page: Page, retries = 5): Promise<void> {
 
 async function generalDemographicSurvey(
   page: Page,
+  from = '',
   birthYear = '',
   gender = '',
   racial = '',
@@ -45,8 +52,9 @@ async function generalDemographicSurvey(
   const modalBody = await page.$('#study')
   const frame = await modalBody.contentFrame()
   // introduction
-  await Promise.all([frame.locator('text=Next →').click(), frame.waitForNavigation()])
-  //await frame.locator('text=Next →').click()
+  await frame.locator('#NextButton').click()
+  // referred from
+  await setReferrer(frame, from)
   // year born
   await setBirthYear(frame, birthYear)
   // gender identity
@@ -66,7 +74,17 @@ async function generalDemographicSurvey(
   // current zip code
   await setZipCode(frame, zipCode)
   // completion screen
-  await page.click('.navbar a', { force: true })
+  // reload the browser page as Playwright cannot reach the completion button
+  for (let reload = 0; reload < 4; reload++) {
+    try {
+      await page.waitForSelector('#study', { timeout: 500 })
+      const modal = await page.$('#study')
+      const newFrame = await modal.contentFrame()
+      await newFrame.click('.btn-primary', { timeout: 500 })
+      break
+    } catch (error) {}
+  }
+  await sleep()
 }
 
 function randomChoice(list: ElementHandle[]): ElementHandle {
@@ -74,7 +92,7 @@ function randomChoice(list: ElementHandle[]): ElementHandle {
   return list[option]
 }
 
-function sleep(seconds = 1.0): Promise<unknown> {
+async function sleep(seconds = 1.0): Promise<unknown> {
   return new Promise((resolve) => {
     setTimeout(resolve, seconds * 1000)
   })
