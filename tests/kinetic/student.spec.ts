@@ -41,11 +41,11 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   const studies = await page.$$('.card[aria-disabled=false]')
   await randomChoice(studies).click()
   // Then: the study details page is displayed
-  expect(page.url()).toMatch(new RegExp(`${kineticBaseURL}\/(details)?\/`))
+  expect(page.url()).toMatch(new RegExp(`${kineticBaseURL}\/study\/details\/[0-9]{0,5}`))
   // When: they click the 'Begin study' button
   await Promise.all([page.click('text=Begin study')])
   // Then: they are taken to the Qualtrics study
-  expect(page.url()).toContainText('qualtrics.com')
+  expect(page.url()).toMatch(`qualtrics\.com`)
 })
 
 test('returning user who did not complete the demographic survey see it again @C639508', async ({
