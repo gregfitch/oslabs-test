@@ -74,7 +74,6 @@ async function generalDemographicSurvey(
   // current zip code
   await setZipCode(frame, zipCode)
   // completion screen
-  // reload the browser page as Playwright cannot reach the completion button
   for (let reload = 0; reload < 4; reload++) {
     try {
       await page.waitForSelector('#study', { timeout: 500 })
