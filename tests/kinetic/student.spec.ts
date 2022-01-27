@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { accountsUserSignup, sleep, test, userSignIn } from './helpers'
+import { accountsUserSignOut, accountsUserSignup, test, userSignIn } from './helpers'
 
 test('returning user who did not complete the demographic survey see it again @C639508', async ({
   accountsBaseURL,
@@ -9,17 +9,14 @@ test('returning user who did not complete the demographic survey see it again @C
   // Setup:
   const student = await accountsUserSignup(page, accountsBaseURL)
   // Given: a user viewing the Kinetic home page
-  await page.goto(kineticBaseURL)
+  await page.goto(kineticBaseURL, { timeout: 15000 })
   // Then: the demographic survey modal is displayed
   const surveyTitle = page.locator('div[role="document"] >> text=Demographic Survey')
   expect(surveyTitle).toBeTruthy()
   // When: they log out
   // And:  open the Kinetic home page
   // And:  log back in
-  // await page.goto(accountsBaseURL)
-  await sleep(1)
-  await page.goto(accountsBaseURL)
-  await page.click('text=Log out')
+  await accountsUserSignOut(page, accountsBaseURL)
   await page.goto(kineticBaseURL)
   await userSignIn(page, student)
   // Then: the demographic survey modal is displayed

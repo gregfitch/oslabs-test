@@ -27,8 +27,31 @@ class Student {
     [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
 }
 
+async function accountsUserSignOut(page: Page, url = ''): Promise<void> {
+  const browserAgent = await page.evaluate(() => navigator.userAgent)
+  if (!browserAgent.includes('Firefox')) {
+    try {
+      await page.goto(`${url}/i/signout`, { timeout: 15000 })
+    } catch (error) {
+      // ignore WebKit nav interrupted error
+    }
+    await page.goto(url)
+  } else {
+    await page.goto(url)
+    await Promise.all([page.click('text=Log out'), page.waitForNavigation()])
+  }
+}
+
 async function accountsUserSignup(page: Page, url = '', student: Student = new Student()): Promise<Student> {
-  if (url) await page.goto(url)
+  /* istanbul ignore else */
+  if (url) {
+    for (let load = 0; load < 4; load++) {
+      try {
+        await page.goto(url, { timeout: 15000 })
+        break
+      } catch (error) {}
+    }
+  }
   await page.click('text=Sign up')
   await page.click('text=Student')
   await page.fill('[placeholder="First name"]', student.first)
@@ -70,4 +93,4 @@ async function webUserSignup(page: Page, url: string, student: Student = new Stu
   return accountsUserSignup(page, null, student)
 }
 
-export { Student, accountsUserSignup, rexUserSignup, userSignIn, webUserSignup }
+export { Student, accountsUserSignOut, accountsUserSignup, rexUserSignup, userSignIn, webUserSignup }

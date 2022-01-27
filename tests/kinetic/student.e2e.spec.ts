@@ -35,7 +35,7 @@ test('new user sign up @e2e @C639507', async ({ accountsBaseURL, baseURL, kineti
   // Then: the study details page is displayed
   expect(page.url()).toMatch(new RegExp(`${kineticBaseURL}\/study\/details\/[0-9]{0,5}`))
   // When: they click the 'Begin study' button
-  await Promise.all([page.click('text=Begin study'), page.waitForNavigation()])
+  await Promise.all([page.waitForNavigation(), page.click('text=Begin study')])
   // Then: they are taken to the Qualtrics study
   expect(page.url()).toMatch(`qualtrics\.com`)
 })
