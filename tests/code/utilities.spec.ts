@@ -8,16 +8,16 @@ test('sleep timer using the default parameter', async () => {
   const startingTime = performance.now()
   await sleep()
   const totalTime = performance.now() - startingTime
-  expect(totalTime).toBeGreaterThanOrEqual(990)
-  expect(totalTime).toBeLessThanOrEqual(1010)
+  expect(totalTime).toBeGreaterThanOrEqual(985)
+  expect(totalTime).toBeLessThanOrEqual(1015)
 })
 
 test('sleep timer with a parameter', async () => {
   const startingTime = performance.now()
   await sleep(0.5)
   const totalTime = performance.now() - startingTime
-  expect(totalTime).toBeGreaterThanOrEqual(490)
-  expect(totalTime).toBeLessThanOrEqual(510)
+  expect(totalTime).toBeGreaterThanOrEqual(485)
+  expect(totalTime).toBeLessThanOrEqual(515)
 })
 
 test('close cookie, PI and React modals', async ({ accountsBaseURL, page, webBaseURL }) => {

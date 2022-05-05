@@ -39,7 +39,7 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
-  reporter: 'list',
+  reporter: [['list'], ['json', { outputFile: 'test-results/results.json' }]],
   retries: 1,
   timeout: 180000,
   use: {

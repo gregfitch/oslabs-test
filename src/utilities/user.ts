@@ -31,15 +31,17 @@ async function accountsUserSignOut(page: Page, url = ''): Promise<void> {
   const browserAgent = await page.evaluate(() => navigator.userAgent)
   if (!browserAgent.includes('Firefox')) {
     try {
-      await page.goto(`${url}/i/signout`, { timeout: 15000 })
+      await Promise.all([page.goto(`${url}/i/signout`, { timeout: 15000 }), page.waitForNavigation()])
     } catch (error) {
       // ignore WebKit nav interrupted error
     }
-    await page.goto(url)
+    await page.goto(`${url}/i/login`)
   } else {
     await page.goto(url)
     await Promise.all([page.click('text=Log out'), page.waitForNavigation()])
   }
+  //await page.goto(url)
+  //await Promise.all([page.click('text=Log out'), page.waitForNavigation()])
 }
 
 async function accountsUserSignup(page: Page, url = '', student: Student = new Student()): Promise<Student> {
