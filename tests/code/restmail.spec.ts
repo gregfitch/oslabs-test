@@ -3,7 +3,7 @@ import test from '../../src/fixtures/base'
 import { Student } from '../../src/utilities/user'
 import { EmailMessageData, checkRestmail, getPin } from '../../src/utilities/restmail'
 
-function newId(length) {
+function newId(length: number) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const options = characters.length
   let result = ''

@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { Student, accountsUserSignup, rexUserSignup, webUserSignup } from '../../src/utilities/user'
+import { Student, accountsUserSignup, rexUserSignup, userSignIn, webUserSignup } from '../../src/utilities/user'
 import test from '../../src/fixtures/base'
 
 test('generate new student information to use with Accounts', async () => {
@@ -52,4 +52,15 @@ test('student sign up from REx', async ({ webBaseURL, page }) => {
   const menuName = await page.textContent('[data-testid=user-nav-toggle]')
   expect(page.url()).toBe(collegeAlgebraURL)
   expect(menuName).toBe(`Hi ${student.first}`)
+})
+
+test('Accounts user sign in', async ({ accountsBaseURL, page }) => {
+  await page.goto(accountsBaseURL)
+  const student = await accountsUserSignup(page)
+  await page.click('text=Log out')
+  const returnedStudent = await userSignIn(page, student)
+  expect(page.url()).toBe(`${accountsBaseURL}/i/profile`)
+  expect(returnedStudent.username).toBe(student.username)
+  const name = await page.locator('#name').textContent()
+  expect(name).toBe(`${student.first} ${student.last}`)
 })
