@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "npm": "^8.3.1",
+    "npm": "^8.11.0",
     "playwright": "^1.17.2"
   }
 }
